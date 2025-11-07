@@ -5,6 +5,8 @@ tasks:
   csv_path: demo_data/tasks.csv
   location_column: location
   reserve_column: Reserve stock locations
+  output_dir: demo_output
+  max_tasks: null
 
 connectivity_map:
   _target_: dexory.connectivity_maps.RandomConnectivityMap

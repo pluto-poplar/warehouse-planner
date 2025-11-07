@@ -36,14 +36,17 @@ Quick Start
 3. Execute the demo workflow (components are configured via `workflows/conf/demo.yaml`):
 
    ```
-   uv run python workflows/demo_workflow.py
+   uv run workflows/demo_workflow.py
    ```
 
    Override parameters as needed, for example:
 
    ```
-   uv run python workflows/demo_workflow.py connectivity_map.seed=42
+   uv run workflows/demo_workflow.py tasks.max_tasks=10 # Only solve 10 tasks
    ```
+
+   Lowest-cost destination selections are written to `tasks.output_dir/tasks_solution.csv` (defaults to `demo_output/tasks_solution.csv`).
+   Set `tasks.max_tasks=<N>` to restrict how many rows from the task CSV are processed (e.g., `tasks.max_tasks=10` for smoke tests).
 
 Project Structure
 -----------------
@@ -64,7 +67,8 @@ Execution Flow
 2. `RandomConnectivityMap` (or another map implementation) builds adjacency lists from the layout.
 3. `TimeBasedMoveCostCalculator` is attached to the map to compute edge weights.
 4. `DijkstraPathFinder` consumes the map and exposes `compute_optimal_path`.
-5. The workflow reads `demo_data/tasks.csv`, extracts source/reserve pairs, and prints the resulting paths/costs.
+5. The workflow reads `demo_data/tasks.csv`, evaluates all candidate reserve locations for each task to find the minimum-cost destination (respecting `tasks.max_tasks` if set).
+6. The winning destination and its cost (seconds) are saved to `tasks.output_dir/tasks_solution.csv`.
 
 Limitations
 -----------
@@ -80,6 +84,6 @@ TODO
 ----
 
 - Replace `RandomConnectivityMap` with a deterministic, geometry-aware implementation derived from actual aisle data.
+- Expand `TimeBasedMoveCostCalculator` to account for turn costs, acceleration limits, and congestion penalties.
 - Add an A* (or faster) path planner and benchmark against the existing Dijkstra implementation.
 - Build end-to-end tests that load real layouts, run representative pick tasks, and assert both path feasibility and latency budgets.
-- Add linting to CI
