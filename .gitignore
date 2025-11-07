@@ -15,7 +15,6 @@ venv/
 .uv_cache/
 .uv_lock/
 .uv_work/
-uv.lock
 
 # Distribution / packaging
 build/
@@ -59,3 +58,4 @@ Thumbs.db
 .envrc
 .secret*
 *.sqlite3
+outputs
