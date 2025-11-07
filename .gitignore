@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+.uv/
+.venv*/
+*.env
+
+# uv build / cache
+.uv_cache/
+.uv_lock/
+.uv_work/
+uv.lock
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage outputs
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Type checker cache
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# Ruff / lint cache
+.ruff_cache/
+
+# IDE / editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs / runtime artifacts
+*.log
+logs/
+*.pid
+*.out
+
+# OS / misc
+.DS_Store
+Thumbs.db
+
+# Local settings
+.env
+.envrc
+.secret*
+*.sqlite3
