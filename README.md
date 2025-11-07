@@ -45,8 +45,9 @@ Quick Start
    uv run workflows/demo_workflow.py tasks.max_tasks=10 # Only solve 10 tasks
    ```
 
-   Lowest-cost destination selections are written to `tasks.output_dir/tasks_solution.csv` (defaults to `demo_output/tasks_solution.csv`).
+   Lowest-cost destination selections (evaluated across both `Reserve stock locations` and `Nearby empty locations`) are written to `tasks.output_dir/tasks_solution.csv` (defaults to `demo_output/tasks_solution.csv`).
    Set `tasks.max_tasks=<N>` to restrict how many rows from the task CSV are processed (e.g., `tasks.max_tasks=10` for smoke tests).
+   Adjust the CSV column names via `tasks.reserve_column` and `tasks.nearby_empty_column` if headers differ.
 
 Project Structure
 -----------------
@@ -67,7 +68,7 @@ Execution Flow
 2. `RandomConnectivityMap` (or another map implementation) builds adjacency lists from the layout.
 3. `TimeBasedMoveCostCalculator` is attached to the map to compute edge weights.
 4. `DijkstraPathFinder` consumes the map and exposes `compute_optimal_path`.
-5. The workflow reads `demo_data/tasks.csv`, evaluates all candidate reserve locations for each task to find the minimum-cost destination (respecting `tasks.max_tasks` if set).
+5. The workflow reads `demo_data/tasks.csv`, merges the `Reserve stock locations` and `Nearby empty locations` pools for each task, and evaluates every candidate destination (respecting `tasks.max_tasks` if set).
 6. The winning destination and its cost (seconds) are saved to `tasks.output_dir/tasks_solution.csv`.
 
 Limitations

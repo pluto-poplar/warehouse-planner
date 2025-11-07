@@ -1,4 +1,5 @@
 import logging
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -17,6 +18,17 @@ logging.basicConfig(
 def _resolve_json_path(path_str: str) -> Path:
     """Return an absolute Path for a Hydra-configured location."""
     return Path(to_absolute_path(path_str))
+
+
+def _parse_locations(raw_value: object) -> list[str]:
+    """Convert comma-separated string(s) into a deduplicated list of locations."""
+    if raw_value is None:
+        return []
+    if isinstance(raw_value, float) and math.isnan(raw_value):
+        return []
+    if not isinstance(raw_value, str):
+        return []
+    return [loc.strip() for loc in raw_value.split(",") if loc.strip()]
 
 
 @main(version_base=None, config_path="conf", config_name="demo")
@@ -55,15 +67,33 @@ def run_demo(cfg: DictConfig) -> None:
         if max_tasks is not None and idx >= max_tasks:
             break
         source_location = task_row[cfg.tasks.location_column]
-        reserve_locations = [
-            loc.strip()
-            for loc in task_row[cfg.tasks.reserve_column].strip().split(",")
-            if loc.strip()
-        ]
-        # TODO: include empty locations as well
+        reserve_locations = _parse_locations(task_row.get(cfg.tasks.reserve_column))
+
+        nearby_column = cfg.tasks.nearby_empty_column
+        nearby_locations = []
+        if nearby_column is not None and nearby_column in task_row.index:
+            nearby_locations = _parse_locations(task_row.get(nearby_column))
+
+        candidate_locations: list[str] = []
+        for loc in reserve_locations + nearby_locations:
+            if loc not in candidate_locations:
+                candidate_locations.append(loc)
+
+        if not candidate_locations:
+            logging.warning(
+                "No candidate destinations for %s (row %s)", source_location, idx
+            )
+            record = {
+                "task_location": source_location,
+                "target_empty_location": "",
+                "static_travel_cost_seconds": float("inf"),
+            }
+            results.append(record)
+            continue
+
         best_target: str | None = None
         best_cost = float("inf")
-        for candidate in reserve_locations:
+        for candidate in candidate_locations:
             path, cost = path_finder.compute_optimal_path(source_location, candidate)
             if cost < best_cost:
                 best_cost = cost
