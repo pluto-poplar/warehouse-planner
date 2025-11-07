@@ -1,0 +1,21 @@
+layout:
+  path: demo_data/warehouse-layout.json
+
+tasks:
+  csv_path: demo_data/tasks.csv
+  location_column: location
+  reserve_column: Reserve stock locations
+
+connectivity_map:
+  _target_: dexory.connectivity_maps.RandomConnectivityMap
+  _partial_: true
+  seed: null
+
+move_cost:
+  _target_: dexory.move_cost.TimeBasedMoveCostCalculator
+  speed_x: 1.0
+  speed_y: 1.0
+  speed_z: 0.5
+
+pathfinder:
+  _target_: dexory.pathfinding.DijkstraPathFinder
