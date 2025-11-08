@@ -25,7 +25,7 @@ class CachingMoveCostCalculator(ABC):
     ) -> float:
         """Return cached move cost if available, otherwise compute and cache it."""
 
-        key = (loc_0.name, loc_0.name)
+        key = (loc_0.name, loc_1.name)
         if key in self.move_cost_cache:
             return self.move_cost_cache[key]
 

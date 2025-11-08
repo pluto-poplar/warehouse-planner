@@ -42,3 +42,19 @@ class WarehouseLocationModel(BaseModel):
             (self.bounds.min.y + self.bounds.max.y) / 2.0,
             (self.bounds.min.z + self.bounds.max.z) / 2.0,
         )
+
+
+LocationsStoreType = dict[str, WarehouseLocationModel]
+LocationsByFeatureType = dict[str, list[str]]
+
+
+class WarehouseLayoutModel(BaseModel):
+    """Dataclass for storing warehouse layout."""
+
+    locations: LocationsStoreType
+    keys_by_rack_face: LocationsByFeatureType
+    keys_by_column: LocationsByFeatureType
+
+    def get_location(self, name: str) -> WarehouseLocationModel:
+        """Get location by name."""
+        return self.locations[name]

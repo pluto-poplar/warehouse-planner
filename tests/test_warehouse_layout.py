@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from dexory.models import WarehouseLocationModel
-from dexory.warehouse_layout import JsonWarehouseLayoutLoader, WarehouseLayout
+from dexory.models import WarehouseLayoutModel, WarehouseLocationModel
+from dexory.warehouse_layout import JsonWarehouseLayoutLoader
 
 
 def test_json_loader_parses_valid_file(sample_json: Path):
@@ -13,7 +13,7 @@ def test_json_loader_parses_valid_file(sample_json: Path):
     loader = JsonWarehouseLayoutLoader(sample_json)
     layout = loader.load()
 
-    assert isinstance(layout, WarehouseLayout)
+    assert isinstance(layout, WarehouseLayoutModel)
     assert len(layout.locations) == 2
     assert "A11-120-00" in layout.locations
     assert "A11 2" in layout.keys_by_rack_face

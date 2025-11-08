@@ -59,6 +59,7 @@ def loc_a() -> WarehouseLocationModel:
         max=Coord3DModel(x=1.0, y=1.0, z=1.0),
     )
     return WarehouseLocationModel(
+        rackface="TEST",
         id="A",
         name="A",
         type="rack",
@@ -77,6 +78,7 @@ def loc_b() -> WarehouseLocationModel:
         max=Coord3DModel(x=3.0, y=4.0, z=5.0),
     )
     return WarehouseLocationModel(
+        rackface="TEST",
         id="B",
         name="B",
         type="rack",
@@ -85,4 +87,3 @@ def loc_b() -> WarehouseLocationModel:
         shelf=0,
         bounds=bounds,
     )
-

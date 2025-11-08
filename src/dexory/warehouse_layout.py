@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from dataclasses import dataclass
 import json
 from pathlib import Path
 
@@ -9,28 +8,16 @@ from pydantic import ValidationError
 
 import logging
 
-from dexory.models import WarehouseLocationModel
+from dexory.models import (
+    LocationsByFeatureType,
+    LocationsStoreType,
+    WarehouseLayoutModel,
+    WarehouseLocationModel,
+)
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
-
-
-LocationsStoreType = dict[str, WarehouseLocationModel]
-LocationsByFeatureType = dict[str, list[str]]
-
-
-@dataclass
-class WarehouseLayout:
-    """Dataclass for storing warehouse layout."""
-
-    locations: LocationsStoreType
-    keys_by_rack_face: LocationsByFeatureType
-    keys_by_column: LocationsByFeatureType
-
-    def get_location(self, name: str) -> WarehouseLocationModel:
-        """Get location by name."""
-        return self.locations[name]
 
 
 class WarehouseLayoutLoader(ABC):
@@ -40,7 +27,7 @@ class WarehouseLayoutLoader(ABC):
     """
 
     @abstractmethod
-    def load(self) -> WarehouseLayout:
+    def load(self) -> WarehouseLayoutModel:
         """Parse raw layout data into structured dicts and models."""
         pass
 
@@ -54,7 +41,7 @@ class JsonWarehouseLayoutLoader(WarehouseLayoutLoader):
         super().__init__()
         self.json_path = json_path
 
-    def load(self) -> WarehouseLayout:
+    def load(self) -> WarehouseLayoutModel:
         """Load and parse the raw json data into structured internal format."""
 
         # Load JSON file
@@ -75,7 +62,8 @@ class JsonWarehouseLayoutLoader(WarehouseLayoutLoader):
                 try:
                     # Creates pydantic model directly from dicts
                     location_model = WarehouseLocationModel(
-                        **{**rack_face_area, **location}, **{"rackface": rack_face_area['name']}
+                        **{**rack_face_area, **location},
+                        **{"rackface": rack_face_area["name"]},
                     )
                     if location_model.name in locations:
                         # Note: probably better ways to handle this
@@ -86,12 +74,18 @@ class JsonWarehouseLayoutLoader(WarehouseLayoutLoader):
                     keys_by_rack_face[rack_face_area["name"]].append(
                         location_model.name
                     )
-                    distinct_column_key = f"{rack_face_area['name']}_{location_model.column}"
-                    keys_by_column[distinct_column_key].append((location_model.name, location_model.shelf))
+                    distinct_column_key = (
+                        f"{rack_face_area['name']}_{location_model.column}"
+                    )
+                    keys_by_column[distinct_column_key].append(location_model.name)
 
                 except ValidationError as e:
                     logging.warning(
                         f"Skipped invalid location {location.get('name')}: {e}"
                     )
 
-        return WarehouseLayout(locations=locations, keys_by_rack_face=keys_by_rack_face, keys_by_column=keys_by_column)
+        return WarehouseLayoutModel(
+            locations=locations,
+            keys_by_rack_face=keys_by_rack_face,
+            keys_by_column=keys_by_column,
+        )

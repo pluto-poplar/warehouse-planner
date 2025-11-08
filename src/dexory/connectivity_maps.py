@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from tqdm import tqdm
 
-from dexory.warehouse_layout import WarehouseLayout
+from dexory.models import WarehouseLayoutModel
 from dexory.move_cost import (
     CachingMoveCostCalculator,
 )
@@ -31,7 +31,7 @@ class ConnectivityMap(ABC):
 
     def __init__(
         self,
-        warehouse_layout: WarehouseLayout,
+        warehouse_layout: WarehouseLayoutModel,
     ) -> None:
         """Initialise.
 
@@ -109,7 +109,7 @@ class RandomConnectivityMap(ConnectivityMap):
 
     def __init__(
         self,
-        layout: WarehouseLayout,
+        layout: WarehouseLayoutModel,
         seed: int | None = None,
     ) -> None:
         """Initialise.
