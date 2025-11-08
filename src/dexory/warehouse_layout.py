@@ -17,7 +17,7 @@ logging.basicConfig(
 
 
 LocationsStoreType = dict[str, WarehouseLocationModel]
-LocationsByRackFaceType = dict[str, list[str]]
+LocationsByFeatureType = dict[str, list[str]]
 
 
 @dataclass
@@ -25,7 +25,8 @@ class WarehouseLayout:
     """Dataclass for storing warehouse layout."""
 
     locations: LocationsStoreType
-    keys_by_rack_face: LocationsByRackFaceType
+    keys_by_rack_face: LocationsByFeatureType
+    keys_by_column: LocationsByFeatureType
 
     def get_location(self, name: str) -> WarehouseLocationModel:
         """Get location by name."""
@@ -66,14 +67,15 @@ class JsonWarehouseLayoutLoader(WarehouseLayoutLoader):
 
         # Parse data
         locations: LocationsStoreType = {}
-        keys_by_rack_face: LocationsByRackFaceType = defaultdict(list)
+        keys_by_rack_face: LocationsByFeatureType = defaultdict(list)
+        keys_by_column: LocationsByFeatureType = defaultdict(list)
         for rack_face_area in data.get("rack_face_areas", []):
-            logging.info(f"Parsing rack face area {rack_face_area.get('name')}")
+            logging.info(f"Parsing rack face area {rack_face_area['name']}")
             for location in rack_face_area.get("locations", []):
                 try:
                     # Creates pydantic model directly from dicts
                     location_model = WarehouseLocationModel(
-                        **{**rack_face_area, **location}
+                        **{**rack_face_area, **location}, **{"rackface": rack_face_area['name']}
                     )
                     if location_model.name in locations:
                         # Note: probably better ways to handle this
@@ -84,10 +86,12 @@ class JsonWarehouseLayoutLoader(WarehouseLayoutLoader):
                     keys_by_rack_face[rack_face_area["name"]].append(
                         location_model.name
                     )
+                    distinct_column_key = f"{rack_face_area['name']}_{location_model.column}"
+                    keys_by_column[distinct_column_key].append((location_model.name, location_model.shelf))
 
                 except ValidationError as e:
                     logging.warning(
                         f"Skipped invalid location {location.get('name')}: {e}"
                     )
 
-        return WarehouseLayout(locations=locations, keys_by_rack_face=keys_by_rack_face)
+        return WarehouseLayout(locations=locations, keys_by_rack_face=keys_by_rack_face, keys_by_column=keys_by_column)

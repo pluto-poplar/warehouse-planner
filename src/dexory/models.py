@@ -22,6 +22,7 @@ class BoundsModel(BaseModel):
 class WarehouseLocationModel(BaseModel):
     """Model that stores location of a single discrete location in the warehouse."""
 
+    rackface: str
     id: str
     name: str
     type: str
