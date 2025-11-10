@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 import logging
 
-from dexory.models import (
+from adaptive_warehouse.models import (
     LocationsByFeatureType,
     LocationsStoreType,
     WarehouseLayoutModel,

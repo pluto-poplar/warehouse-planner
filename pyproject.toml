@@ -1,5 +1,5 @@
 [project]
-name = "dexory"
+name = "adaptive_warehouse"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -19,7 +19,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/dexory"]
+packages = ["src/adaptive_warehouse"]
 
 
 [tool.poe.tasks]

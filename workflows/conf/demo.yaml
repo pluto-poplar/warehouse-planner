@@ -10,15 +10,15 @@ tasks:
   max_tasks: null
 
 connectivity_map:
-  _target_: dexory.connectivity_maps.RandomConnectivityMap
+  _target_: adaptive_warehouse.connectivity_maps.RandomConnectivityMap
   _partial_: true
   seed: null
 
 move_cost:
-  _target_: dexory.move_cost.TimeBasedMoveCostCalculator
+  _target_: adaptive_warehouse.move_cost.TimeBasedMoveCostCalculator
   speed_x: 1.0
   speed_y: 1.0
   speed_z: 0.5
 
 pathfinder:
-  _target_: dexory.pathfinding.DijkstraPathFinder
+  _target_: adaptive_warehouse.pathfinding.DijkstraPathFinder

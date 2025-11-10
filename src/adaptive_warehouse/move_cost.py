@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from dexory.models import WarehouseLocationModel
+from adaptive_warehouse.models import WarehouseLocationModel
 
 MoveCostCacheType = dict[tuple[str, str], float]
 

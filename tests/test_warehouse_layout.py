@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from dexory.models import WarehouseLayoutModel, WarehouseLocationModel
-from dexory.warehouse_layout import JsonWarehouseLayoutLoader
+from adaptive_warehouse.models import WarehouseLayoutModel, WarehouseLocationModel
+from adaptive_warehouse.warehouse_layout import JsonWarehouseLayoutLoader
 
 
 def test_json_loader_parses_valid_file(sample_json: Path):

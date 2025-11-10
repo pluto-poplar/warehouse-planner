@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import heapq
 
-from dexory.connectivity_maps import ConnectivityMap
+from adaptive_warehouse.connectivity_maps import ConnectivityMap
 
 
 class PathFinder(ABC):

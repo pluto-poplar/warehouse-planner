@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from tqdm import tqdm
 
-from dexory.models import WarehouseLayoutModel
-from dexory.move_cost import (
+from adaptive_warehouse.models import WarehouseLayoutModel
+from adaptive_warehouse.move_cost import (
     CachingMoveCostCalculator,
 )
 

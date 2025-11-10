@@ -1,4 +1,4 @@
-Dexory Pathfinding Demo
+Adaptive_Warehouse Pathfinding
 =======================
 
 This repository contains a simplified pathfinding stack for warehouse layouts.
@@ -52,11 +52,11 @@ Quick Start
 Project Structure
 -----------------
 
-- `src/dexory/models.py`: Warehouse location models.
-- `src/dexory/warehouse_layout.py`: Layout loader abstractions.
-- `src/dexory/move_cost.py`: Move cost calculators (caching, time-based).
-- `src/dexory/connectivity_maps.py`: Graph generation logic.
-- `src/dexory/pathfinding.py`: PathFinder base and Dijkstra implementation.
+- `src//adaptive_warehouse/models.py`: Warehouse location models.
+- `src//adaptive_warehouse/warehouse_layout.py`: Layout loader abstractions.
+- `src//adaptive_warehouse/move_cost.py`: Move cost calculators (caching, time-based).
+- `src//adaptive_warehouse/connectivity_maps.py`: Graph generation logic.
+- `src//adaptive_warehouse/pathfinding.py`: PathFinder base and Dijkstra implementation.
 - `workflows/demo_workflow.py`: Demo script for running tasks.
 - `workflows/conf/demo.yaml`: Default configuration for the demo.
 - `tests/`: Pytest suites for layout and cost components.

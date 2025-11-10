@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
 
-from dexory.models import Coord3DModel, BoundsModel, WarehouseLocationModel
-from dexory.move_cost import CachingMoveCostCalculator, TimeBasedMoveCostCalculator
+from adaptive_warehouse.models import Coord3DModel, BoundsModel, WarehouseLocationModel
+from adaptive_warehouse.move_cost import CachingMoveCostCalculator, TimeBasedMoveCostCalculator
 
 
 def test_get_cost_caches_results(loc_a, loc_b):

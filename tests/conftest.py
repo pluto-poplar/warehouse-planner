@@ -4,7 +4,7 @@ import pytest
 import json
 from pathlib import Path
 
-from dexory.models import BoundsModel, Coord3DModel, WarehouseLocationModel
+from adaptive_warehouse.models import BoundsModel, Coord3DModel, WarehouseLocationModel
 
 
 @pytest.fixture

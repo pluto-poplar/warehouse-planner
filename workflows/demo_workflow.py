@@ -7,7 +7,7 @@ from hydra import main
 from hydra.utils import instantiate, to_absolute_path
 from omegaconf import DictConfig
 
-from dexory.warehouse_layout import JsonWarehouseLayoutLoader
+from adaptive_warehouse.warehouse_layout import JsonWarehouseLayoutLoader
 
 
 logging.basicConfig(
