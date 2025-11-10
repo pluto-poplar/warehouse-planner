@@ -209,3 +209,12 @@ move_cost:
 pathfinder:
   _target_: adaptive_warehouse.pathfinding.DijkstraPathFinder
 ```
+
+TODO
+----
+
+- Replace `RandomConnectivityMap` with a deterministic, geometry-aware implementation derived from actual aisle data.
+- Expand `TimeBasedMoveCostCalculator` to account for turn costs, acceleration limits, and congestion penalties.
+- Add an A* (or faster) path planner and benchmark against the existing Dijkstra implementation.
+- Build end-to-end tests that load real layouts, run representative pick tasks, and assert both path feasibility and latency budgets.
+- git LFS for demo files

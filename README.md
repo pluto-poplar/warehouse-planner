@@ -9,6 +9,11 @@ It includes:
 - Pathfinders (Dijkstra) that operate on the connectivity graph.
 - A demo workflow that wires the components together.
 
+**The current implementation uses a random connectivity graph and a very basic pathfinder, so it runs slowly and produces results that aren’t physically meaningful. The system, however, is designed to be highly extensible and modular, making it easy to incorporate better graph construction methods and pathfinding algorithms. I would have liked to explore this further, but due to time constraints, it seemed more important to build a solid foundation on which these tools can be developed.**
+
+- [Full model and data architecture description](docs/model_data_architecture.md)
+- [Production system ideas](docs/production_system.md)
+
 Prerequisites
 -------------
 
@@ -45,18 +50,18 @@ Quick Start
    uv run workflows/demo_workflow.py tasks.max_tasks=10 # Only solve 10 tasks
    ```
 
-   Lowest-cost destination selections (evaluated across both `Reserve stock locations` and `Nearby empty locations`) are written to `tasks.output_dir/tasks_solution.csv` (defaults to `demo_output/tasks_solution.csv`).
-   Set `tasks.max_tasks=<N>` to restrict how many rows from the task CSV are processed (e.g., `tasks.max_tasks=10` for smoke tests).
-   Adjust the CSV column names via `tasks.reserve_column` and `tasks.nearby_empty_column` if headers differ.
+- Lowest-cost destination selections (evaluated across both `Reserve stock locations` and `Nearby empty locations`) are written to `tasks.output_dir/tasks_solution.csv` (defaults to `demo_output/tasks_solution.csv`).
+- Set `tasks.max_tasks=<N>` to restrict how many rows from the task CSV are processed (e.g., `tasks.max_tasks=10` for smoke tests).
+- Adjust the CSV column names via `tasks.reserve_column` and `tasks.nearby_empty_column` if headers differ.
 
 Project Structure
 -----------------
 
-- `src//adaptive_warehouse/models.py`: Warehouse location models.
-- `src//adaptive_warehouse/warehouse_layout.py`: Layout loader abstractions.
-- `src//adaptive_warehouse/move_cost.py`: Move cost calculators (caching, time-based).
-- `src//adaptive_warehouse/connectivity_maps.py`: Graph generation logic.
-- `src//adaptive_warehouse/pathfinding.py`: PathFinder base and Dijkstra implementation.
+- `src/adaptive_warehouse/models.py`: Warehouse location models.
+- `src/adaptive_warehouse/warehouse_layout.py`: Layout loader abstractions.
+- `src/adaptive_warehouse/move_cost.py`: Move cost calculators (caching, time-based).
+- `src/adaptive_warehouse/connectivity_maps.py`: Graph generation logic.
+- `src/adaptive_warehouse/pathfinding.py`: PathFinder base and Dijkstra implementation.
 - `workflows/demo_workflow.py`: Demo script for running tasks.
 - `workflows/conf/demo.yaml`: Default configuration for the demo.
 - `tests/`: Pytest suites for layout and cost components.
@@ -88,3 +93,4 @@ TODO
 - Expand `TimeBasedMoveCostCalculator` to account for turn costs, acceleration limits, and congestion penalties.
 - Add an A* (or faster) path planner and benchmark against the existing Dijkstra implementation.
 - Build end-to-end tests that load real layouts, run representative pick tasks, and assert both path feasibility and latency budgets.
+- git LFS for demo files
