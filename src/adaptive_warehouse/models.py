@@ -35,13 +35,39 @@ class WarehouseLocationModel(BaseModel):
         description="Centroid of the bounding box, computed post init.", default=None
     )
 
+    access_point: tuple[float, float, float] | None = Field(
+        description="Access point to location, given front.", default=None
+    )
+
     def model_post_init(self, __context: dict[Any, Any]) -> None:
         """Compute the centroid automatically after validation."""
+        self._compute_centroid()
+        self._compute_access_point()
+
+    def _compute_centroid(self) -> None:
+        """Compute the centroid."""
         self.centroid = (
             (self.bounds.min.x + self.bounds.max.x) / 2.0,
             (self.bounds.min.y + self.bounds.max.y) / 2.0,
             (self.bounds.min.z + self.bounds.max.z) / 2.0,
         )
+
+    def _compute_access_point(self) -> None:
+        """Project centroid onto the face indicated by `front`."""
+        if self.centroid is None:
+            self._compute_centroid()
+        cx, cy, cz = self.centroid  # type: ignore[misc]
+        match self.front:
+            case "POSITIVE_X":
+                self.access_point = (self.bounds.max.x, cy, cz)
+            case "NEGATIVE_X":
+                self.access_point = (self.bounds.min.x, cy, cz)
+            case "POSITIVE_Y":
+                self.access_point = (cx, self.bounds.max.y, cz)
+            case "NEGATIVE_Y":
+                self.access_point = (cx, self.bounds.min.y, cz)
+            case _:
+                raise ValueError(f"Unsupported front direction: {self.front}")
 
 
 LocationsStoreType = dict[str, WarehouseLocationModel]
